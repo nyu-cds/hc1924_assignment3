@@ -7,7 +7,7 @@
 """
 from itertools import combinations
 
-def advance(iterations, dt = 0.01):
+def advance(iterations, planet = planet, BODIES = BODIES, dt = 0.01):
     '''
         advance the system one timestep
     '''
@@ -31,7 +31,7 @@ def advance(iterations, dt = 0.01):
             r[1] += dt * vy
             r[2] += dt * vz
     
-def report_energy(e=0.0):
+def report_energy(planet = planet, BODIES = BODIES, e=0.0):
     '''
         compute the energy and return it so that it can be printed
     '''
