@@ -5,28 +5,25 @@
     Runtime: 155.048527956 / 3 = 51.682842652s
     R = L_orig / L_opt = 3.04
 """
+from itertools import combinations
 
 def advance(iterations, dt = 0.01):
     '''
         advance the system one timestep
     '''
-    fadd = seenit.add
+
     for _ in range(iterations):
-        seenit = set()
-        for body1 in planet:
-            for body2 in planet:
-                if (body1 != body2) and not (body2 in seenit):
-                    ([x1, y1, z1], v1, m1) = BODIES[body1]
-                    ([x2, y2, z2], v2, m2) = BODIES[body2]
-                    (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
-                    mag = dt * ((dx * dx + dy * dy + dz * dz) ** (-1.5))
-                    v1[0] -= dx * m2 * mag
-                    v1[1] -= dy * m2 * mag
-                    v1[2] -= dz * m2 * mag
-                    v2[0] += dx * m1 * mag
-                    v2[1] += dy * m1 * mag
-                    v2[2] += dz * m1 * mag
-                    fadd(body1)
+
+        for (body1, body2) in pairs:
+            ([x1, y1, z1], v1, m1) = bodies[body1]
+            ([x2, y2, z2], v2, m2) = bodies[body2]
+            (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
+            mag = dt * ((dx * dx + dy * dy + dz * dz) ** (-1.5))
+            v1[0] -= dx * m2 * mag
+            v1[1] -= dy * m2 * mag
+            v1[2] -= dz * m2 * mag
+            v2[0] += dx * m1 * mag
+            v2[1] += dy * m1 * mag
 
         for body in planet:
             (r, [vx, vy, vz], m) = BODIES[body]
@@ -38,16 +35,13 @@ def report_energy(e=0.0):
     '''
         compute the energy and return it so that it can be printed
     '''
-    fadd = seenit.add
-    seenit = set()
-    for body1 in planet:
-        for body2 in planet:
-            if (body1 != body2) and not (body2 in seenit):
-                ((x1, y1, z1), v1, m1) = BODIES[body1]
-                ((x2, y2, z2), v2, m2) = BODIES[body2]
-                (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
-                e -= (m1 * m2) / ((dx * dx + dy * dy + dz * dz) ** 0.5)
-                fadd(body1)
+    for (body1, body2) in pairs:
+        ([x1, y1, z1], v1, m1) = bodies[body1]
+        ([x2, y2, z2], v2, m2) = bodies[body2]
+        (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
+        (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
+        e -= (m1 * m2) / ((dx * dx + dy * dy + dz * dz) ** 0.5)
+                
         
     for body in planet:
         (r, [vx, vy, vz], m) = BODIES[body]
@@ -110,6 +104,8 @@ def nbody(loops, reference, iterations):
     # Set up global state
     # reference is the body in the center of the system
     # offset values from this reference
+    bodies = BODIES.copy()
+    pairs = set(combinations(bodies.keys(), 2))
 
     px=0.0
     py=0.0
