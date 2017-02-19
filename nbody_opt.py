@@ -10,9 +10,9 @@ def advance(iterations, dt = 0.01):
     '''
         advance the system one timestep
     '''
+    fadd = seenit.add
     for _ in range(iterations):
         seenit = set()
-        fadd = seenit.add
         for body1 in planet:
             for body2 in planet:
                 if (body1 != body2) and not (body2 in seenit):
@@ -38,8 +38,8 @@ def report_energy(e=0.0):
     '''
         compute the energy and return it so that it can be printed
     '''
-    seenit = set()
     fadd = seenit.add
+    seenit = set()
     for body1 in planet:
         for body2 in planet:
             if (body1 != body2) and not (body2 in seenit):
