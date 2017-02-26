@@ -128,6 +128,6 @@ def nbody(loops, reference, iterations):
 
 if __name__ == '__main__':
 
-    print timeit.timeit("nbody(100, 'sun', 20000)", setup = "from __main__ import nbody", number = 3)
+    print (timeit.timeit("nbody(100, 'sun', 20000)", setup = "from __main__ import nbody", number = 3))
 
 
