@@ -6,67 +6,15 @@
     R = L_orig / L_opt = 3.04
 """
 from itertools import combinations
+planet = {'sun', 'jupiter', 'saturn', 'uranus', 'neptune'}
+bodies = BODIES.copy()
+pairs = set(combinations(bodies.keys(), 2))
 
-def advance(iterations, planet = planet, BODIES = BODIES, dt = 0.01):
-    '''
-        advance the system one timestep
-    '''
+PI = 3.14159265358979323
+SOLAR_MASS = 4 * PI * PI
+DAYS_PER_YEAR = 365.24
 
-    for _ in range(iterations):
-
-        for (body1, body2) in pairs:
-            ([x1, y1, z1], v1, m1) = bodies[body1]
-            ([x2, y2, z2], v2, m2) = bodies[body2]
-            (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
-            mag = dt * ((dx * dx + dy * dy + dz * dz) ** (-1.5))
-            v1[0] -= dx * m2 * mag
-            v1[1] -= dy * m2 * mag
-            v1[2] -= dz * m2 * mag
-            v2[0] += dx * m1 * mag
-            v2[1] += dy * m1 * mag
-
-        for body in planet:
-            (r, [vx, vy, vz], m) = BODIES[body]
-            r[0] += dt * vx
-            r[1] += dt * vy
-            r[2] += dt * vz
-    
-def report_energy(planet = planet, BODIES = BODIES, e=0.0):
-    '''
-        compute the energy and return it so that it can be printed
-    '''
-    for (body1, body2) in pairs:
-        ([x1, y1, z1], v1, m1) = bodies[body1]
-        ([x2, y2, z2], v2, m2) = bodies[body2]
-        (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
-        (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
-        e -= (m1 * m2) / ((dx * dx + dy * dy + dz * dz) ** 0.5)
-                
-        
-    for body in planet:
-        (r, [vx, vy, vz], m) = BODIES[body]
-        e += m * (vx * vx + vy * vy + vz * vz) / 2.
-        
-    return e
-
-
-def nbody(loops, reference, iterations):
-
-    
-    '''
-        nbody simulation
-        loops - number of loops to run
-        reference - body at center of system
-        iterations - number of timesteps to advance
-    '''
-    import timeit
-    
-    planet = {'sun', 'jupiter', 'saturn', 'uranus', 'neptune'}
-    PI = 3.14159265358979323
-    SOLAR_MASS = 4 * PI * PI
-    DAYS_PER_YEAR = 365.24
-
-    BODIES = {
+BODIES = {
             'sun': ([0.0, 0.0, 0.0], [0.0, 0.0, 0.0], SOLAR_MASS),
 
             'jupiter': ([4.84143144246472090e+00,
@@ -100,12 +48,63 @@ def nbody(loops, reference, iterations):
                          1.62824170038242295e-03 * DAYS_PER_YEAR,
                          -9.51592254519715870e-05 * DAYS_PER_YEAR],
                         5.15138902046611451e-05 * SOLAR_MASS)}
+def advance(iterations, BODIES = BODIES, dt = 0.01):
+    '''
+        advance the system one timestep
+    '''
+
+    for _ in range(iterations):
+
+        for (body1, body2) in pairs:
+            ([x1, y1, z1], v1, m1) = bodies[body1]
+            ([x2, y2, z2], v2, m2) = bodies[body2]
+            (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
+            mag = dt * ((dx * dx + dy * dy + dz * dz) ** (-1.5))
+            v1[0] -= dx * m2 * mag
+            v1[1] -= dy * m2 * mag
+            v1[2] -= dz * m2 * mag
+            v2[0] += dx * m1 * mag
+            v2[1] += dy * m1 * mag
+
+        for body in planet:
+            (r, [vx, vy, vz], m) = BODIES[body]
+            r[0] += dt * vx
+            r[1] += dt * vy
+            r[2] += dt * vz
+    
+def report_energy(BODIES = BODIES, e=0.0):
+    '''
+        compute the energy and return it so that it can be printed
+    '''
+    for (body1, body2) in pairs:
+        ([x1, y1, z1], v1, m1) = bodies[body1]
+        ([x2, y2, z2], v2, m2) = bodies[body2]
+        (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
+        (dx, dy, dz) = (x1-x2, y1-y2, z1-z2)
+        e -= (m1 * m2) / ((dx * dx + dy * dy + dz * dz) ** 0.5)
+                
+        
+    for body in planet:
+        (r, [vx, vy, vz], m) = BODIES[body]
+        e += m * (vx * vx + vy * vy + vz * vz) / 2.
+        
+    return e
+
+
+def nbody(loops, reference, iterations):
+
+    
+    '''
+        nbody simulation
+        loops - number of loops to run
+        reference - body at center of system
+        iterations - number of timesteps to advance
+    '''
+    import timeit
 
     # Set up global state
     # reference is the body in the center of the system
     # offset values from this reference
-    bodies = BODIES.copy()
-    pairs = set(combinations(bodies.keys(), 2))
 
     px=0.0
     py=0.0
@@ -122,9 +121,9 @@ def nbody(loops, reference, iterations):
     v[2] = pz / m
 
     for _ in range(loops):
-        report_energy()
-        advance(iterations)
-        print(report_energy())
+        report_energy(BODIES = BODIES)
+        advance(iterations,BODIES = BODIES)
+        print(report_energy(BODIES = BODIES))
 
 if __name__ == '__main__':
 
