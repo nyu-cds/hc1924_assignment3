@@ -96,7 +96,6 @@ def report_energy(bodies, e=0.0):
 
 
 def nbody(loops, reference, iterations):
-
     
     '''
         nbody simulation
