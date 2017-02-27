@@ -5,6 +5,7 @@
     Runtime: 36.697s
     R = L_orig / L_opt = 4.28
 """
+# use itertools combinations to reduce loop overhead
 from itertools import combinations
 import timeit
     
