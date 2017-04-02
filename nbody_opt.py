@@ -2,8 +2,8 @@
 """
     N-body simulation.
     Final optimal version
-    Runtime: 155.048527956 / 3 = 51.682842652s
-    R = L_orig / L_opt = 3.04
+    Runtime: 43.7323770523s
+    R = L_orig / L_opt = 3.59
 """
 from itertools import combinations
 
