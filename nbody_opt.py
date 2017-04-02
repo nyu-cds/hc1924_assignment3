@@ -6,9 +6,6 @@
     R = L_orig / L_opt = 3.04
 """
 from itertools import combinations
-planet = {'sun', 'jupiter', 'saturn', 'uranus', 'neptune'}
-bodies = BODIES.copy()
-pairs = set(combinations(bodies.keys(), 2))
 
 PI = 3.14159265358979323
 SOLAR_MASS = 4 * PI * PI
@@ -48,6 +45,9 @@ BODIES = {
                          1.62824170038242295e-03 * DAYS_PER_YEAR,
                          -9.51592254519715870e-05 * DAYS_PER_YEAR],
                         5.15138902046611451e-05 * SOLAR_MASS)}
+planet = {'sun', 'jupiter', 'saturn', 'uranus', 'neptune'}
+bodies = BODIES.copy()
+pairs = set(combinations(bodies.keys(), 2))
 def advance(iterations, BODIES = BODIES, dt = 0.01):
     '''
         advance the system one timestep
@@ -100,7 +100,6 @@ def nbody(loops, reference, iterations):
         reference - body at center of system
         iterations - number of timesteps to advance
     '''
-    import timeit
 
     # Set up global state
     # reference is the body in the center of the system
@@ -126,7 +125,6 @@ def nbody(loops, reference, iterations):
         print(report_energy(BODIES = BODIES))
 
 if __name__ == '__main__':
-
-    print (timeit.timeit("nbody(100, 'sun', 20000)", setup = "from __main__ import nbody", number = 3))
-
+    import timeit
+    print (timeit.timeit("nbody(100, 'sun', 20000)", setup = "from __main__ import nbody", number = 1))
 

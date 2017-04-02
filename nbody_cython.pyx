@@ -1,11 +1,12 @@
+
 """
     N-body simulation.
     author: Hongting Chen
     Cython version
-    Runtime: 25.048527956 / 3 = 51.682842652s
-    R = L_orig / L_opt = 6.27
+    Runtime: 8.048527956
+    R = L_orig / L_opt = 40
 """
-
+import cython
 from itertools import combinations
 
 cdef float PI = 3.14159265358979323
@@ -136,6 +137,6 @@ cpdef float nbody(int loops, str reference, int iterations):
         print(report_energy(bodies = BODIES))
 
 if __name__ == '__main__':
-    
     import timeit
     print(timeit.timeit("nbody(100, 'sun', 20000)", setup="from __main__ import nbody", number=1))
+
