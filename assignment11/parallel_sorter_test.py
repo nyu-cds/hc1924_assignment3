@@ -1,7 +1,9 @@
 '''
-Test for Collective Communication Assignment
+Easy test for Collective Communication Assignment
 Author:Hongting Chen
 04/22/2017
+
+Please run with "python parallel_sorter_test.py"
 
 '''
 import parallel_sorter
